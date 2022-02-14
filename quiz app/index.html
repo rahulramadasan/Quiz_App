@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz app</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://kit.fontawesome.com/207585c7cf.js" crossorigin="anonymous"></script>
+    <link rel="js" href="./quiz.js">
+
+
+</head>
+<body>
+<div class="jumbotron">
+    <div id="quiz">
+
+    </div>
+    <button class="btn btn-primary" id="bt1">submit</button>
+    <div id="result">
+    </div>
+</div>
+
+
+
+<script>
+    
+    (function(){
+        var quizcontainer=document.getElementById('quiz');
+        var resultcontainer=document.getElementById('result');
+        var submitbtn=document.getElementById('bt1');
+
+    const myquest =
+        [
+            
+            {
+                
+                question:"India's largest city by population",
+                answers:{a:"delhi",b:"mumbai",c:"chennai"},
+                correctAnswer:"a"
+            },
+            {
+                
+                question: "Which one of these is a JavaScript package manager?",
+                answers: {a: "Node.js",b:"TypeScript",c: "npm"},
+                correctAnswer: "c"
+            },
+            {
+                
+                question: "Which tool can you use to ensure code quality?",
+                answers: {a: "Angular",b: "jQuery",c: "ESLint",},
+                correctAnswer: "c"
+            }
+        ];
+
+
+
+    function buildqz(){
+            const output=[];
+            
+            myquest.forEach( (currentques,questionNumber)=> {
+                const answers=[];
+                for(letter in currentques.answers){
+                    answers.push(
+                    `<label><input type="radio" name="question${questionNumber}" value="${letter}">
+                    ${letter}:${currentques.answers[letter]}</label><br>`
+                    );  
+                }
+                output.push(
+                    `<div class=question>${currentques.question}</div>
+                    <div class="answers">${answers.join('')}</div><br>`
+                );
+            });
+            quizcontainer.innerHTML=output.join('');
+            
+    }
+    buildqz();
+    submitbtn.addEventListener("click",showresult);
+    function showresult(){
+        const answercontainers=quizcontainer.querySelectorAll('.answers');
+        let correct=0;
+        myquest.forEach((currentques,questionNumber)=>{
+            const answercontainer=answercontainers[questionNumber];
+            const selector=`input[name=question${questionNumber}]:checked`;
+            const useranswer=(answercontainer.querySelector(selector)||{}).value;
+            
+            if(useranswer == currentques.correctAnswer){
+
+                correct++;
+
+                answercontainers[questionNumber].style.color="green";
+
+            }
+            else{
+                answercontainers[questionNumber].style.color="red";
+            }
+
+        });
+        resultcontainer.innerHTML=`${correct} out of ${myquest.length}`;
+        
+
+    }
+    
+    })();
+    
+    
+    
+</script>
+
+
+    
+</body>
+</html>
